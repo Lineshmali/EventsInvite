@@ -1,0 +1,8 @@
+<aura:component access="GLOBAL" implements="force:lightningQuickActionWithoutHeader, force:hasRecordId" controller="S1EventsInviteController" >
+	<aura:attribute name="recordId" type="String" />
+	<aura:handler event="c:LookupCmpEvents" action="{!c.handleLookupEvents}" />
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<aura:attribute name="multiObjectMultiSelect" type="Object"/>
+	<lightning:spinner aura:id="_spinner" variant="brand" size="medium" class="slds-hide"/>
+	<c:LookupComponent lookupObjectAPI="{!v.multiObjectMultiSelect}" source="Invitees" multiSelect="true"/>
+</aura:component>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+	<types>
+		<members>ZKKS1EventsInviteController</members>
+		<members>ZKKS1EventsInviteControllerTest</members>
+		<members>S1EventsInviteController</members>
+		<members>S1EventsInviteControllerTest</members>
+		<name>ApexClass</name>
+	</types>
+	<types>
+		<members>ZKKS1EventsInvite</members>
+		<name>ApexPage</name>
+	</types>
+	<types>
+		<members>KKOrgResources</members>
+		<name>StaticResource</name>
+	</types>
+	<types>
+		<members>S1EventsInviteComponent</members>
+		<name>AuraDefinitionBundle</name>
+	</types>
+	<version>34.0</version>
+</Package>
