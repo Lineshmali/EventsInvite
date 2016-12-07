@@ -1,9 +1,9 @@
 ({
-	doInit : function(cmp, evt, helper) {
-		//Contact Lookup
-		var lookupObjectAPI = new Array();
-		var obj = {}
-		obj.name = 'Contact';
+    doInit: function(cmp, evt, helper) {
+        //Contact Lookup
+        var lookupObjectAPI = new Array();
+        var obj = {}
+        obj.name = 'Contact';
         obj.fieldList = 'Id, Name, Email';
         obj.searchScope = 'NAME FIELDS';
         obj.svgPath = '/resource/OrgResources/lib/slds202/assets/icons/standard-sprite/svg/symbols.svg#contact';
@@ -27,39 +27,44 @@
         obj.svgPath = '/resource/OrgResources/lib/slds202/assets/icons/standard-sprite/svg/symbols.svg#user';
         obj.svgClass = 'slds-icon slds-icon-standard-user slds-icon--medium';
         lookupObjectAPI.push(obj);
-        cmp.set('v.multiObjectMultiSelect',lookupObjectAPI);
+        cmp.set('v.multiObjectMultiSelect', lookupObjectAPI);
 
-        
-	},
 
-	handleLookupEvents: function(cmp,evt,helper){
-		 helper.showSpinner(cmp,evt);
-		 var selectedObjects = evt.getParam('selectedObject');
-		 console.log('Selected Objects ', selectedObjects);
-		 var relIds = new Array();
-		 _.each(selectedObjects,function(record){
-		 	relIds.push(record.id);
-		 });
-		 var relIdsJSON = JSON.stringify(relIds);
-		 var apexMethod = cmp.get('c.addInvitees');
-		 apexMethod.setParams({
-		 						'evtId': cmp.get('v.recordId'),
-		 						'relIdsJSON': relIdsJSON
-		 					  });
-		 apexMethod.setCallback(this, function(response) {
-		 	helper.hideSpinner(cmp,evt);
-            var state = response.getState();
-            if (state == 'SUCCESS') {
-                var ret = JSON.parse(response.getReturnValue());
-                if (ret.success) {
-                    helper.showToast(cmp,evt,'Success!',ret.message);
+    },
+
+    handleLookupEvents: function(cmp, evt, helper) {
+        helper.showSpinner(cmp, evt);
+        var selectedObjects = evt.getParam('selectedObject');
+        if (!_.isNull(selectedObjects)) {
+            var relIds = new Array();
+            _.each(selectedObjects, function(record) {
+                relIds.push(record.id);
+            });
+            var relIdsJSON = JSON.stringify(relIds);
+            var apexMethod = cmp.get('c.addInvitees');
+            apexMethod.setParams({
+                'evtId': cmp.get('v.recordId'),
+                'relIdsJSON': relIdsJSON
+            });
+            apexMethod.setCallback(this, function(response) {
+                helper.hideSpinner(cmp, evt);
+                var state = response.getState();
+                if (state == 'SUCCESS') {
+                    var ret = JSON.parse(response.getReturnValue());
+                    if (ret.success) {
+                        helper.showToast(cmp, evt, 'Success!', ret.message);
+                    } else {
+                        helper.showToast(cmp, evt, 'Error!', ret.message);
+                    }
                 } else {
-                    helper.showToast(cmp,evt,'Error!', ret.message);
+                    helper.showToast(cmp, evt, 'Error!', 'Error calling Apex class');
                 }
-            } else {
-                helper.showToast(cmp,evt,'Error!','Error calling Apex class');
-            }
-        });
-        $A.enqueueAction(apexMethod);
-	}
+            });
+            $A.enqueueAction(apexMethod);
+        } else{
+            var dismissActionPanel = $A.get("e.force:closeQuickAction");
+            dismissActionPanel.fire();
+        }
+
+    }
 })
